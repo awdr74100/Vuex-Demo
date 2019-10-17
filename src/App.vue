@@ -17,7 +17,7 @@
           <h6>已選擇商品</h6>
           <table class="table table-sm">
             <tbody>
-              <tr v-for="item in cart.carts" :key="item.id" v-if="cart.carts.length">
+              <tr v-for="item in cart.carts" :key="item.id" >
                 <td class="align-middle text-center">
                   <a href="#" class="text-muted" @click.prevent="removeCart(item.id)">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -62,6 +62,7 @@
             <a class="text-info" href="#">About</a>
           </li>
         </ul>
+        <button @click="aa">觸發</button>
         <p class="text-center">Made with Bootstrap4</p>
       </div>
     </footer>
@@ -76,32 +77,46 @@
         cart: {
           carts: [],
         },
-        isLoading: false,
+        // isLoading: false,
       };
     },
     methods: {
+      aa(){
+       this.$store.dispatch('updateLoading',true);
+        setTimeout(()=>{
+          this.$store.dispatch('updateLoading',false);
+        },3000 )
+      },
       getCart() {
         const vm = this;
-        vm.isLoading = true;
+        // vm.$store.state.isLoading = true;
+        // vm.isLoading = true;
+        vm.$store.dispatch('updateLoading',true);
         const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
         this.$http.get(url).then((response) => {
           if (response.data.data.carts) {
             vm.cart = response.data.data;
           }
-          vm.isLoading = false;
+          // vm.$store.state.isLoading = false;
+          vm.$store.dispatch('updateLoading',false);
           console.log('取得購物車', response.data.data);
         });
       },
       removeCart(id) {
         const vm = this;
         const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`;
-        vm.isLoading = true;
+        vm.$store.dispatch('updateLoading',true);
         this.$http.delete(url).then((response) => {
-          vm.isLoading = false;
+         vm.$store.dispatch('updateLoading',false);
           vm.getCart();
           console.log('刪除購物車項目', response);
         });
       },
+    },
+    computed:{
+      isLoading(){
+        return this.$store.state.isLoading;
+      }
     },
     created() {
       this.getCart();
