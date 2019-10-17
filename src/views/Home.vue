@@ -84,10 +84,10 @@
         }
         return this.products;
       },
-      categories(){
+      categories() {
         return this.$store.state.categories;
       },
-      products(){
+      products() {
         return this.$store.state.products;
       }
     },
@@ -97,7 +97,10 @@
       },
       addtoCart(id, qty = 1) {
         const vm = this;
-       vm.$store.dispatch('addtoCart',{id, qty} )
+        vm.$store.dispatch('addtoCart', {
+          id,
+          qty
+        })
       },
     },
     created() {
