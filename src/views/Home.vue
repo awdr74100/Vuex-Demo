@@ -70,9 +70,7 @@
     name: 'Home',
     data() {
       return {
-     
         searchText: '',
-  
       };
     },
     computed: {
@@ -95,44 +93,11 @@
     },
     methods: {
       getProducts() {
-        // const vm = this;
-        // const url =
-        //   `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;
-        // // vm.isLoading = true;
-        // // vm.$store.state.isLoading = true;
-        // vm.$store.dispatch('updateLoading',true);
-        // this.$http.get(url).then((response) => {
-        //   vm.products = response.data.products;
-        //   console.log('取得產品列表:', response);
-        //   vm.getUnique();
-        //   // vm.$store.state.isLoading = false;
-        //   vm.$store.dispatch('updateLoading',false);
-        // });
         this.$store.dispatch('getProducts');
       },
       addtoCart(id, qty = 1) {
         const vm = this;
-        const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-        // vm.$store.state.isLoading = true;
-        const item = {
-          product_id: id,
-          qty,
-        };
-       vm.$store.dispatch('updateLoading',true);
-        this.$http.post(url, {
-          data: item
-        }).then((response) => {
-          vm.$store.dispatch('updateLoading',false);
-          console.log('加入購物車:', response);
-        });
-      },
-      getUnique() {
-        const vm = this;
-        const categories = new Set();
-        vm.products.forEach((item) => {
-          categories.add(item.category);
-        });
-        vm.categories = Array.from(categories);
+       vm.$store.dispatch('addtoCart',{id, qty} )
       },
     },
     created() {

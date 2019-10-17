@@ -62,7 +62,6 @@
             <a class="text-info" href="#">About</a>
           </li>
         </ul>
-        <button @click="aa">觸發</button>
         <p class="text-center">Made with Bootstrap4</p>
       </div>
     </footer>
@@ -74,48 +73,25 @@
     name: 'App',
     data() {
       return {
-        cart: {
-          carts: [],
-        },
-        // isLoading: false,
+
       };
     },
     methods: {
-      aa(){
-       this.$store.dispatch('updateLoading',true);
-        setTimeout(()=>{
-          this.$store.dispatch('updateLoading',false);
-        },3000 )
-      },
       getCart() {
         const vm = this;
-        // vm.$store.state.isLoading = true;
-        // vm.isLoading = true;
-        vm.$store.dispatch('updateLoading',true);
-        const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;
-        this.$http.get(url).then((response) => {
-          if (response.data.data.carts) {
-            vm.cart = response.data.data;
-          }
-          // vm.$store.state.isLoading = false;
-          vm.$store.dispatch('updateLoading',false);
-          console.log('取得購物車', response.data.data);
-        });
+        vm.$store.dispatch('getCart');
       },
       removeCart(id) {
         const vm = this;
-        const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`;
-        vm.$store.dispatch('updateLoading',true);
-        this.$http.delete(url).then((response) => {
-         vm.$store.dispatch('updateLoading',false);
-          vm.getCart();
-          console.log('刪除購物車項目', response);
-        });
+       vm.$store.dispatch('removeCart',id);
       },
     },
     computed:{
       isLoading(){
         return this.$store.state.isLoading;
+      },
+      cart(){
+        return this.$store.state.cart;
       }
     },
     created() {
